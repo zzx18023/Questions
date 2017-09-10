@@ -6,13 +6,33 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<title>Document</title>
 		<script src="js/jquery-3.2.1.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			@keyframes mymove {
+				from {
+					transform: translateY(-50px)translateX(-50px);
+				}
+				to {
+					/*transform: none;*/
+				}
+			}
+			
+			#qBox.a {
+				animation: mymove 1s forwards;
+			}
+		</style>
 	</head>
 
 	<body>
-		<p id="q">问题</p>
-		<ul id="a">
-			<li>A：选项</li>
-		</ul>
+		<div id="qBox" class="a">
+			<p id="q">问题</p>
+			<ul id="a">
+				<li>A：选项</li>
+			</ul>
+		</div>
+		<div id="newsBox">
+			<p></p>
+			<p></p>
+		</div>
 
 		<script type="text/javascript">
 			function Questions(data) {
@@ -71,12 +91,19 @@
 				switch(q.status) {
 					case 0:
 						console.log(q.info);
+						alert(q.info);
 						break;
 					case 1:
+						$('#qBox').removeClass('a');
 						$('#q').html(q.data.problem);
 						$('#a').html(q.data.option.map(function(v, i) {
 							return $('<li></li>').html(String.fromCharCode(i + 65) + '：' + v);
 						}));
+						setTimeout(function(){
+							$('#qBox').addClass('a');
+						});
+						
+
 						break;
 					case 2:
 						console.log(q.info);
@@ -84,6 +111,10 @@
 							return String.fromCharCode(i + 65);
 						});
 						console.log(q.data_String);
+
+						$('#newsBox>p').eq(0).html(q.info);
+						$('#newsBox>p').eq(1).html(q.data_String);
+						$('#qBox').css('display', 'none');
 						break;
 					default:
 						console.log(q.info);
